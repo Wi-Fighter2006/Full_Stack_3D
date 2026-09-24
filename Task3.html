@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AdminPro - Analytics Dashboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #F1F5F9;
+      color: #64748B;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 240px;
+      background-color: #0F172A;
+      color: #CBD5E1;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px 16px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #FFFFFF;
+      padding: 0 8px 24px 8px;
+    }
+
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      background-color: #2563EB;
+      color: #FFFFFF;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #CBD5E1;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .nav-item.active {
+      background-color: #4F46E5;
+      color: #FFFFFF;
+    }
+
+    .nav-item:hover:not(.active) {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #FFFFFF;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background-color: #4F46E5;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .user-info .name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #FFFFFF;
+    }
+
+    .user-info .role {
+      font-size: 11px;
+      color: #64748B;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .header {
+      height: 64px;
+      background-color: #FFFFFF;
+      border-bottom: 1px solid #E2E8F0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: #0F172A;
+    }
+
+    .search-input {
+      background-color: #F1F5F9;
+      border: 1px solid #E2E8F0;
+      border-radius: 6px;
+      padding: 7px 12px;
+      font-size: 13px;
+      outline: none;
+      width: 240px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #E2E8F0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #0F172A;
+    }
+
+    .content {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0F172A;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .card {
+      background-color: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .kpi-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .kpi-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #64748B;
+    }
+
+    .kpi-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      background-color: #F1F5F9;
+    }
+
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 6px;
+    }
+
+    .kpi-change {
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .change-up {
+      color: #16A34A;
+    }
+
+    .change-text {
+      color: #64748B;
+      font-weight: normal;
+    }
+
+    .grid-row-1 {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+    }
+
+    .grid-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0F172A;
+    }
+
+    .card-link {
+      font-size: 12px;
+      color: #4F46E5;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .chart-container {
+      width: 100%;
+      height: 180px;
+    }
+
+    .chart-container svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    th {
+      padding: 10px 8px;
+      font-weight: 500;
+      color: #64748B;
+      border-bottom: 1px solid #E2E8F0;
+    }
+
+    td {
+      padding: 10px 8px;
+      color: #0F172A;
+      border-bottom: 1px solid #F1F5F9;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .status-delivered {
+      background-color: #DCFCE7;
+      color: #16A34A;
+    }
+
+    .status-processing {
+      background-color: #FEF3C7;
+      color: #D97706;
+    }
+
+    .status-shipped {
+      background-color: #DBEAFE;
+      color: #2563EB;
+    }
+
+    .status-canceled {
+      background-color: #FEE2E2;
+      color: #DC2626;
+    }
+
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      height: 140px;
+      padding-top: 10px;
+    }
+
+    .bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .bar {
+      width: 100%;
+      max-width: 24px;
+      background-color: #2563EB;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .bar-label {
+      font-size: 11px;
+      color: #64748B;
+    }
+
+    @media (max-width: 1023px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid-row-1 {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-row-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .sidebar {
+        display: none;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+
+      .header {
+        padding: 0 16px;
+      }
+
+      .search-input {
+        width: 160px;
+      }
+
+      .content {
+        padding: 16px;
+        gap: 16px;
+      }
+
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div>
+        <div class="logo-area">
+          <div class="logo-icon">&#9632;</div>
+          <span>AdminPro</span>
+        </div>
+
+        <nav class="nav-menu">
+          <a href="#" class="nav-item active">&#9638; Dashboard</a>
+          <a href="#" class="nav-item">&#128200; Analytics</a>
+          <a href="#" class="nav-item">&#128101; Users</a>
+          <a href="#" class="nav-item">&#128722; Orders</a>
+          <a href="#" class="nav-item">&#128230; Products</a>
+          <a href="#" class="nav-item">&#9881; Settings</a>
+        </nav>
+      </div>
+
+      <div class="user-profile">
+        <div class="avatar">PC</div>
+        <div class="user-info">
+          <div class="name">Piyush Choudhary</div>
+          <div class="role">Admin</div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main-wrapper">
+      <header class="header">
+        <div class="header-left">
+          <button class="menu-btn">&#9776;</button>
+          <input type="text" class="search-input" placeholder="Search...">
+        </div>
+
+        <div class="header-right">
+          <span>&#128276;</span>
+          <div class="header-avatar">&#128100;</div>
+        </div>
+      </header>
+
+      <main class="content">
+        <div class="page-title">Dashboard</div>
+
+        <section class="kpi-grid">
+          <div class="card">
+            <div class="kpi-top">
+              <span class="kpi-label">Total Revenue</span>
+              <div class="kpi-icon">&#128176;</div>
+            </div>
+            <div class="kpi-value">&#8377;1,24,532</div>
+            <div class="kpi-change change-up">&#8593; 12% <span class="change-text">from last month</span></div>
+          </div>
+
+          <div class="card">
+            <div class="kpi-top">
+              <span class="kpi-label">Total Orders</span>
+              <div class="kpi-icon">&#128722;</div>
+            </div>
+            <div class="kpi-value">892</div>
+            <div class="kpi-change change-up">&#8593; 8% <span class="change-text">from last month</span></div>
+          </div>
+
+          <div class="card">
+            <div class="kpi-top">
+              <span class="kpi-label">Active Users</span>
+              <div class="kpi-icon">&#128101;</div>
+            </div>
+            <div class="kpi-value">3,521</div>
+            <div class="kpi-change change-up">&#8593; 14% <span class="change-text">from last month</span></div>
+          </div>
+
+          <div class="card">
+            <div class="kpi-top">
+              <span class="kpi-label">Conversion Rate</span>
+              <div class="kpi-icon">&#127919;</div>
+            </div>
+            <div class="kpi-value">4.2%</div>
+            <div class="kpi-change change-up">&#8593; 2% <span class="change-text">from last month</span></div>
+          </div>
+        </section>
+
+        <section class="grid-row-1">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <span class="card-title">Revenue Overview</span>
+                <div style="font-size: 18px; font-weight: bold; color: #0F172A; margin-top: 4px;">
+                  &#8377;1,24,532 <span style="font-size: 12px; color: #16A34A; font-weight: normal;">+12%</span>
+                </div>
+              </div>
+            </div>
+            <div class="chart-container">
+              <svg viewBox="0 0 500 150">
+                <polyline fill="none" stroke="#2563EB" stroke-width="3" points="20,130 80,110 140,115 200,90 260,85 320,60 380,75 440,30 480,45" />
+                <circle cx="20" cy="130" r="4" fill="#2563EB" />
+                <circle cx="80" cy="110" r="4" fill="#2563EB" />
+                <circle cx="140" cy="115" r="4" fill="#2563EB" />
+                <circle cx="200" cy="90" r="4" fill="#2563EB" />
+                <circle cx="260" cy="85" r="4" fill="#2563EB" />
+                <circle cx="320" cy="60" r="4" fill="#2563EB" />
+                <circle cx="380" cy="75" r="4" fill="#2563EB" />
+                <circle cx="440" cy="30" r="4" fill="#2563EB" />
+                <circle cx="480" cy="45" r="4" fill="#2563EB" />
+              </svg>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Recent Orders</span>
+              <a href="#" class="card-link">View all &rarr;</a>
+            </div>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Maheep Singh</td>
+                    <td>&#8377;2,499</td>
+                    <td><span class="status-badge status-delivered">Delivered</span></td>
+                  </tr>
+                  <tr>
+                    <td>Rakhi Sawant</td>
+                    <td>&#8377;4,999</td>
+                    <td><span class="status-badge status-processing">Processing</span></td>
+                  </tr>
+                  <tr>
+                    <td>Samay Raina</td>
+                    <td>&#8377;1,299</td>
+                    <td><span class="status-badge status-shipped">Shipped</span></td>
+                  </tr>
+                  <tr>
+                    <td>Sunil Pal</td>
+                    <td>&#8377;3,799</td>
+                    <td><span class="status-badge status-delivered">Delivered</span></td>
+                  </tr>
+                  <tr>
+                    <td>Prasant Kumar</td>
+                    <td>&#8377;5,499</td>
+                    <td><span class="status-badge status-canceled">Canceled</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid-row-2">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <span class="card-title">Traffic Overview</span>
+                <div style="font-size: 18px; font-weight: bold; color: #0F172A; margin-top: 4px;">
+                  8,432 <span style="font-size: 12px; color: #64748B; font-weight: normal;">Total Visitors</span>
+                </div>
+              </div>
+              <span style="font-size: 12px; color: #16A34A; font-weight: bold;">&#8593; 10%</span>
+            </div>
+            <div class="bar-chart">
+              <div class="bar-group">
+                <div class="bar" style="height: 35%;"></div>
+                <span class="bar-label">Mon</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar" style="height: 45%;"></div>
+                <span class="bar-label">Tue</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar" style="height: 38%;"></div>
+                <span class="bar-label">Wed</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar" style="height: 60%;"></div>
+                <span class="bar-label">Thu</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar" style="height: 52%;"></div>
+                <span class="bar-label">Fri</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar" style="height: 65%;"></div>
+                <span class="bar-label">Sat</span>
+              </div>
+              <div class="bar-group">
+                <div class="bar" style="height: 90%;"></div>
+                <span class="bar-label">Sun</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Top Products</span>
+            </div>
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Sales</th>
+                    <th>Change</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Laptop Pro</td>
+                    <td>2,450</td>
+                    <td style="color: #16A34A;">+12%</td>
+                  </tr>
+                  <tr>
+                    <td>Wireless Earbuds</td>
+                    <td>1,892</td>
+                    <td style="color: #16A34A;">+8%</td>
+                  </tr>
+                  <tr>
+                    <td>Smart Watch</td>
+                    <td>1,203</td>
+                    <td style="color: #16A34A;">+6%</td>
+                  </tr>
+                  <tr>
+                    <td>Backpack</td>
+                    <td>982</td>
+                    <td style="color: #16A34A;">+4%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+</body>
+</html>

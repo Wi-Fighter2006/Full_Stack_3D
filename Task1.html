@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlowTask</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, sans-serif;
+      background-color: #F8FAFC;
+      color: #475569;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .navbar-wrapper {
+      background-color: #F8FAFC;
+      border-bottom: 1px solid #E2E8F0;
+    }
+
+    .navbar {
+      height: 72px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #0F172A;
+      text-decoration: none;
+    }
+
+    .logo-box {
+      width: 28px;
+      height: 28px;
+      background-color: #4F46E5;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: #475569;
+      text-decoration: none;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .btn-login {
+      color: #0F172A;
+      padding: 10px 14px;
+    }
+
+    .btn-primary {
+      background-color: #4F46E5;
+      color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+      background-color: #4338CA;
+    }
+
+    .btn-outline {
+      background-color: #FFFFFF;
+      color: #0F172A;
+      border: 1px solid #E2E8F0;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: #0F172A;
+      cursor: pointer;
+    }
+
+    .hero {
+      min-height: 520px;
+      margin-top: 80px;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-content {
+      max-width: 650px;
+    }
+
+    .badge {
+      display: inline-block;
+      background-color: #EEF2FF;
+      color: #4F46E5;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #0F172A;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      line-height: 1.6;
+      color: #475569;
+      margin-bottom: 32px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .features {
+      padding: 40px 0 80px 0;
+    }
+
+    .features-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .features-header h2 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 8px;
+    }
+
+    .features-header p {
+      font-size: 16px;
+      color: #475569;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .card {
+      background-color: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      border-radius: 8px;
+      padding: 24px;
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      background-color: #EEF2FF;
+      color: #4F46E5;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    .card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #0F172A;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 16px;
+      line-height: 1.5;
+      color: #475569;
+    }
+
+    @media (min-width: 640px) and (max-width: 1023px) {
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 639px) {
+      .nav-links,
+      .nav-actions {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .hero {
+        margin-top: 40px;
+        min-height: auto;
+      }
+
+      .hero-content {
+        text-align: center;
+        margin: 0 auto;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .hero-buttons {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .hero-buttons .btn {
+        width: 100%;
+      }
+
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar-wrapper">
+    <div class="container">
+      <div class="navbar">
+        <a href="#" class="logo">
+          <div class="logo-box">FT</div>
+          <span>FlowTask</span>
+        </a>
+
+        <div class="nav-links">
+          <a href="#">Features</a>
+          <a href="#">Pricing</a>
+          <a href="#">Docs</a>
+        </div>
+
+        <div class="nav-actions">
+          <a href="#" class="btn btn-login">Login</a>
+          <a href="#" class="btn btn-primary">Get Started</a>
+        </div>
+
+        <button class="menu-toggle">&#9776;</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="hero">
+      <div class="hero-content">
+        <span class="badge">Work Smarter</span>
+        <h1>Build Better Products Faster With Our Platform</h1>
+        <p>Streamline your workflow, collaborate with your team, and ship faster with our all-in-one platform.</p>
+        <div class="hero-buttons">
+          <a href="#" class="btn btn-primary">Get Started</a>
+          <a href="#" class="btn btn-outline">View Demo</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="features-header">
+        <h2>Powerful Features</h2>
+        <p>Everything you need to build, manage and grow your product.</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-icon">&#9889;</div>
+          <h3>Fast & Reliable</h3>
+          <p>Experience blazing fast performance with 99.9% uptime.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">&#128101;</div>
+          <h3>Team Collaboration</h3>
+          <p>Work together seamlessly with real-time updates.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-icon">&#128737;</div>
+          <h3>Secure by Design</h3>
+          <p>Your data is always protected with enterprise-grade security.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
